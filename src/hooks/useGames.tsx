@@ -1,11 +1,19 @@
 import { useEffect, useState } from "react";
 import apiClient from "../service/api-client";
 import { CanceledError } from "axios";
+import { RAWG_RESPONSE } from "./fakeAPI";
+
+export interface Platform {
+  id: number;
+  name: string;
+  slug: string;
+}
 
 export interface Game {
   id: number;
   name: string;
   background_image: string;
+  parent_platforms: { platform: Platform }[];
 }
 
 interface FechinGamesResponse {
@@ -18,6 +26,11 @@ const useGames = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    // Use fake API during development to save credits
+    setGames(RAWG_RESPONSE);
+    // Early return for fake API
+    return;
+
     const controller = new AbortController();
 
     apiClient
