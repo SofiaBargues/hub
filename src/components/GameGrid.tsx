@@ -3,6 +3,7 @@ import useGames from "../hooks/useGames";
 import GameCard from "./GameCard";
 import { SiDigikeyelectronics } from "react-icons/si";
 import GameCardSkeleton from "./GameCardSkeleton";
+import GameCardCointainer from "./GameCardCointainer";
 
 export const GameGrid = () => {
   const { games, error, isLoading } = useGames();
@@ -17,9 +18,15 @@ export const GameGrid = () => {
         spacing={10}
       >
         {isLoading &&
-          skeleton.map((skeleton) => <GameCardSkeleton key={skeleton} />)}
+          skeleton.map((skeleton) => (
+            <GameCardCointainer>
+              <GameCardSkeleton key={skeleton} />
+            </GameCardCointainer>
+          ))}
         {games.map((game) => (
-          <GameCard key={game.id} game={game} />
+          <GameCardCointainer>
+            <GameCard key={game.id} game={game} />
+          </GameCardCointainer>
         ))}
       </SimpleGrid>
     </>
