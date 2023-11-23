@@ -25,10 +25,12 @@ interface FechinGamesResponse {
 const useGames = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     // Use fake API during development to save credits
     setGames(RAWG_RESPONSE);
+    setLoading(false);
     // Early return for fake API
     return;
 
@@ -36,14 +38,18 @@ const useGames = () => {
 
     apiClient
       .get<FechinGamesResponse>("/games", { signal: controller.signal })
-      .then((res) => setGames(res.data.results))
+      .then((res) => {
+        setGames(res.data.results);
+        setLoading(false);
+      })
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
+        setLoading(false);
       });
 
     return () => controller.abort();
   }, []);
-  return { games, error };
+  return { games, error, isLoading };
 };
 export default useGames;
