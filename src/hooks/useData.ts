@@ -1,27 +1,28 @@
 import { useEffect, useState } from "react";
-import { FechingGamesResponse, Game } from "./useGames";
 import apiClient from "../service/api-client";
 import { CanceledError } from "axios";
-import { RAWG_GENRES_RESPONSE } from "./fakeAPI";
+import { RAWG_GAMES_RESPONSE, RAWG_GENRES_RESPONSE } from "./fakeAPI";
 
-export interface Genre {
-  id: number;
-  name: string;
-}
-interface FechingGenresResponse {
+interface FechResponse<T> {
   count: number;
-  results: Genre[];
+  results: T[];
 }
 
-const useGenres = () => {
-  const [genres, setGenres] = useState<Genre[]>([]);
+const useData = <T>(endpoint: string) => {
+  const [data, setData] = useState<T[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(true);
-  console.log(genres);
 
   useEffect(() => {
     // Use fake API during development to save credits
-    setGenres(RAWG_GENRES_RESPONSE);
+    setData(
+      // @ts-ignore faking API data
+      endpoint == "/games"
+        ? RAWG_GAMES_RESPONSE
+        : endpoint == "/genres"
+        ? RAWG_GENRES_RESPONSE
+        : []
+    );
     setLoading(false);
     //Early return for fake API
     return;
@@ -29,9 +30,9 @@ const useGenres = () => {
     const controller = new AbortController();
 
     apiClient
-      .get<FechingGenresResponse>("/genres", { signal: controller.signal })
+      .get<FechResponse<T>>(endpoint, { signal: controller.signal })
       .then((res) => {
-        setGenres(res.data.results);
+        setData(res.data.results);
         setLoading(false);
       })
       .catch((err) => {
@@ -43,10 +44,10 @@ const useGenres = () => {
     return () => controller.abort();
   }, []);
   return {
-    genres,
+    data,
     error,
     isLoading,
   };
 };
 
-export default useGenres;
+export default useData;
