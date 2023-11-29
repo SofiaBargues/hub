@@ -7,7 +7,7 @@ import GameCardCointainer from "./GameCardCointainer";
 import useData from "../hooks/useData";
 
 export const GameGrid = () => {
-  const { data, error, isLoading } = useData<Game>("/games");
+  const { data, error, isLoading } = useGames();
   const skeleton = [1, 2, 3, 4, 5, 6];
 
   return (
