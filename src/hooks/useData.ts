@@ -20,17 +20,20 @@ const useData = <T>(
   useEffect(
     () => {
       // // Use fake API during development to save credits
-      setData(
-        // @ts-ignore faking API data
-        endpoint == "/games"
-          ? RAWG_GAMES_RESPONSE
-          : endpoint == "/genres"
-          ? RAWG_GENRES_RESPONSE
-          : []
-      );
-      setLoading(false);
-      // //Early return for fake API
-      return;
+      const FAKE_API = true;
+      if (FAKE_API) {
+        setData(
+          // @ts-ignore faking API data
+          endpoint == "/games"
+            ? RAWG_GAMES_RESPONSE
+            : endpoint == "/genres"
+            ? RAWG_GENRES_RESPONSE
+            : []
+        );
+        setLoading(false);
+        // //Early return for fake API
+        return;
+      }
 
       const controller = new AbortController();
 
