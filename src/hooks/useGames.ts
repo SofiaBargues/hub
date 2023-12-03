@@ -3,6 +3,7 @@ import apiClient from "../service/api-client";
 import { CanceledError } from "axios";
 import { RAWG_GAMES_RESPONSE } from "./fakeAPI";
 import useData from "./useData";
+import { Genre } from "./useGenres";
 
 export interface Platform {
   id: number;
@@ -18,5 +19,8 @@ export interface Game {
   metacritic: number;
 }
 
-const useGames = () => useData<Game>("/games");
+const useGames = (selectedGenre: Genre | null) =>
+  useData<Game>("/games", { params: { genres: selectedGenre?.id } }, [
+    selectedGenre?.id,
+  ]);
 export default useGames;

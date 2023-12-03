@@ -5,9 +5,14 @@ import { SiDigikeyelectronics } from "react-icons/si";
 import GameCardSkeleton from "./GameCardSkeleton";
 import GameCardCointainer from "./GameCardCointainer";
 import useData from "../hooks/useData";
+import { Genre } from "../hooks/useGenres";
 
-export const GameGrid = () => {
-  const { data, error, isLoading } = useGames();
+interface Props {
+  selectedGenre: Genre | null;
+}
+
+export const GameGrid = ({ selectedGenre }: Props) => {
+  const { data, error, isLoading } = useGames(selectedGenre);
   const skeleton = [1, 2, 3, 4, 5, 6];
 
   return (
@@ -20,13 +25,13 @@ export const GameGrid = () => {
       >
         {isLoading &&
           skeleton.map((skeleton) => (
-            <GameCardCointainer>
-              <GameCardSkeleton key={skeleton} />
+            <GameCardCointainer key={skeleton}>
+              <GameCardSkeleton />
             </GameCardCointainer>
           ))}
         {data.map((game) => (
-          <GameCardCointainer>
-            <GameCard key={game.id} game={game} />
+          <GameCardCointainer key={game.id}>
+            <GameCard game={game} />
           </GameCardCointainer>
         ))}
       </SimpleGrid>
