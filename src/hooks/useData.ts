@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import apiClient from "../service/api-client";
 import { Axios, AxiosRequestConfig, CanceledError } from "axios";
-import { RAWG_GAMES_RESPONSE, RAWG_GENRES_RESPONSE } from "./fakeAPI";
+import {
+  RAWG_CONSOLA_RESPONSE,
+  RAWG_GAMES_RESPONSE,
+  RAWG_GENRES_RESPONSE,
+} from "./fakeAPI";
 
 interface FechResponse<T> {
   count: number;
@@ -17,10 +21,12 @@ const useData = <T>(
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(true);
 
+  // // Use fake API during development to save credits
+  const FAKE_API = true;
+  //console.log(data);
+
   useEffect(
     () => {
-      // // Use fake API during development to save credits
-      const FAKE_API = true;
       if (FAKE_API) {
         setData(
           // @ts-ignore faking API data
@@ -28,6 +34,8 @@ const useData = <T>(
             ? RAWG_GAMES_RESPONSE
             : endpoint == "/genres"
             ? RAWG_GENRES_RESPONSE
+            : endpoint == "/platforms/lists/parents"
+            ? RAWG_CONSOLA_RESPONSE
             : []
         );
         setLoading(false);
