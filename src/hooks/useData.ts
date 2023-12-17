@@ -22,7 +22,7 @@ const useData = <T>(
   const [isLoading, setLoading] = useState(true);
 
   // // Use fake API during development to save credits
-  const FAKE_API = false;
+  const FAKE_API = true;
   //console.log(data);
 
   useEffect(
